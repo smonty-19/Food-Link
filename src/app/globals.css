@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* FoodLink palette: warm paper, deep ink, terracotta accent, leaf green. */
+@theme {
+  --color-paper: #faf6ef;
+  --color-card: #ffffff;
+  --color-ink: #2b2521;
+  --color-muted: #6f655c;
+  --color-line: #e7ddd0;
+  --color-sand: #f2ebe0;
+
+  --color-brand: #b4532a;
+  --color-brand-dark: #8f3f1d;
+  --color-brand-soft: #f6e4d9;
+
+  --color-leaf: #4b7339;
+  --color-leaf-soft: #e5eedc;
+  --color-amber: #9a6512;
+  --color-amber-soft: #f8ebcf;
+  --color-rose: #a23b3e;
+  --color-rose-soft: #f6e0df;
+  --color-slate: #586474;
+  --color-slate-soft: #e6e9ee;
+
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-display), ui-serif, Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--color-paper);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }
+
+::selection {
+  background: var(--color-brand-soft);
+}
+
+/* Form controls share one quiet style */
+.field {
+  width: 100%;
+  border: 1px solid var(--color-line);
+  background: var(--color-card);
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 120ms, box-shadow 120ms;
+}
+.field:focus {
+  border-color: var(--color-brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 15%, transparent);
+}
+
+/* Leaflet: keep maps under the sticky header and give pins our colours */
+.leaflet-container {
+  font-family: var(--font-sans);
+  z-index: 0;
+}
+.fl-pin {
+  width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  border: 3px solid #fff;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.35);
+}
+.fl-pin--brand { background: var(--color-brand); }
+.fl-pin--leaf { background: var(--color-leaf); }
+.fl-pin--ink { background: var(--color-ink); }
