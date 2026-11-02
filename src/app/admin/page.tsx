@@ -35,7 +35,7 @@ function Table({ head, children }: { head: string[]; children: ReactNode }) {
         <thead>
           <tr className="border-b border-line text-left text-muted">
             {head.map((h, i) => (
-              <th key={h} className={`py-2.5 font-medium ${i === 0 ? "px-5" : "px-3"} ${i > 0 ? "text-right" : ""}`}>
+              <th key={h} className={`py-2.5 font-medium whitespace-nowrap ${i === 0 ? "px-5" : "px-3"} ${i > 0 ? "text-right" : ""}`}>
                 {h}
               </th>
             ))}
@@ -90,9 +90,9 @@ export default async function AdminPage() {
           {[
             {
               title: "Expiry sweep",
-              text: `${num(hk.stale_live)} listing(s) past their deadline but not yet marked. Runs every minute automatically.`,
+              text: `${num(hk.stale_live)} listing(s) past their deadline but not yet marked. expire_stale_donations() also runs every minute.`,
               action: runExpirySweep,
-              label: "Run expire_stale_donations()",
+              label: "Run sweep now",
             },
             {
               title: "Donor leaderboard",

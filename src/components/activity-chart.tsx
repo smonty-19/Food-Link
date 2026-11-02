@@ -73,8 +73,8 @@ export function ActivityChart({ days }: { days: Day[] }) {
       </svg>
       {h && (
         <div
-          className="pointer-events-none absolute top-2 rounded-lg border border-line bg-card px-3 py-2 text-xs shadow-sm"
-          style={{ left: `${((PAD.left + (hover! + 0.5) * slot) / W) * 100}%`, transform: "translateX(-50%)" }}
+          className="pointer-events-none absolute top-2 rounded-xl bg-card px-3 py-2 text-xs whitespace-nowrap shadow-lg shadow-black/10"
+          style={{ left: `${Math.min(80, Math.max(20, ((PAD.left + (hover! + 0.5) * slot) / W) * 100))}%`, transform: "translateX(-50%)" }}
         >
           <div className="font-medium">{shortDate(h.day)}</div>
           <div>{h.servings} servings delivered</div>

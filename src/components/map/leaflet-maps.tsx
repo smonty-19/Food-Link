@@ -41,7 +41,7 @@ export function LocationPicker({
 
   return (
     <div>
-      <div className="overflow-hidden rounded-lg border border-line" style={{ height }}>
+      <div className="overflow-hidden rounded-[14px] border border-line" style={{ height }}>
         <MapContainer center={pos} zoom={13} scrollWheelZoom={false} style={{ height: "100%" }}>
           <TileLayer url={TILE_URL} attribution={ATTRIBUTION} />
           <ClickToMove onPick={set} />
@@ -58,7 +58,7 @@ export function LocationPicker({
           />
         </MapContainer>
       </div>
-      <p className="mt-1.5 text-xs text-muted">
+      <p className="t-caption mt-2 text-muted">
         Click the map or drag the pin. {pos[0].toFixed(4)}, {pos[1].toFixed(4)}
       </p>
       <input type="hidden" name={latName} value={pos[0]} />
@@ -92,14 +92,14 @@ export function DonationsMap({
   height?: number;
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-line" style={{ height }}>
+    <div className="overflow-hidden rounded-[18px]" style={{ height }}>
       <MapContainer center={center} zoom={12} scrollWheelZoom={false} style={{ height: "100%" }}>
         <TileLayer url={TILE_URL} attribution={ATTRIBUTION} />
         {radiusKm && (
           <Circle
             center={center}
             radius={radiusKm * 1000}
-            pathOptions={{ color: "#b4532a", weight: 1, fillOpacity: 0.04, dashArray: "4 6" }}
+            pathOptions={{ color: "#1d7a52", weight: 1, fillOpacity: 0.04, dashArray: "4 6" }}
           />
         )}
         <Marker position={center} icon={pin("ink")}>
@@ -111,7 +111,7 @@ export function DonationsMap({
               <strong>{p.title}</strong>
               {p.subtitle && <div>{p.subtitle}</div>}
               {p.href && (
-                <a href={p.href} style={{ color: "#b4532a" }}>
+                <a href={p.href} style={{ color: "#1d7a52" }}>
                   Open
                 </a>
               )}

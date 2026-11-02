@@ -81,7 +81,7 @@ export default async function DonationPage({ params }: PageProps<"/donor/donatio
               <div className="space-y-4 px-5 py-4 text-sm">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
-                    <div className="font-serif text-lg font-semibold">{active.recipient_org}</div>
+                    <div className="t-card-title">{active.recipient_org}</div>
                     <div className="text-muted">{active.recipient_address}</div>
                   </div>
                   <StatusBadge status={active.status} />

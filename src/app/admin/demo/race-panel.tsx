@@ -24,9 +24,9 @@ export function RacePanel() {
             ].map(([v, l], i) => (
               <label
                 key={v}
-                className="cursor-pointer rounded-lg border border-line px-3 py-2 text-sm has-checked:border-brand has-checked:bg-brand-soft/60"
+                className="t-small cursor-pointer rounded-full bg-sand px-4 py-2 transition-colors has-checked:bg-brand has-checked:text-white"
               >
-                <input type="radio" name="mode" value={v} defaultChecked={i === 0} className="mr-2 accent-brand" />
+                <input type="radio" name="mode" value={v} defaultChecked={i === 0} className="sr-only" />
                 {l}
               </label>
             ))}
@@ -55,7 +55,7 @@ export function RacePanel() {
             className={`flex flex-wrap items-center justify-between gap-4 px-5 py-4 ${r.correct ? "bg-leaf-soft" : "bg-rose-soft"}`}
           >
             <div>
-              <div className={`font-serif text-2xl font-semibold ${r.correct ? "text-leaf" : "text-rose"}`}>
+              <div className={`t-title ${r.correct ? "text-leaf" : "text-rose"}`}>
                 {r.correct ? "✓ Never over-allocated" : "✗ Over-allocated"}
               </div>
               <div className="text-sm">

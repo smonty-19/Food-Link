@@ -51,7 +51,7 @@ export function DonationForm({ lat, lng }: { lat: number; lng: number }) {
           {DIETARY_TAGS.map((t) => (
             <label
               key={t}
-              className="cursor-pointer rounded-full border border-line px-3 py-1 text-sm capitalize has-checked:border-leaf has-checked:bg-leaf-soft has-checked:text-leaf"
+              className="t-small cursor-pointer rounded-full bg-sand px-3.5 py-1.5 capitalize transition-colors has-checked:bg-brand has-checked:text-white"
             >
               <input type="checkbox" name="tags" value={t} className="sr-only" />
               {tagLabel(t)}
