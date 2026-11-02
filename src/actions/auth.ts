@@ -13,7 +13,7 @@ import {
   type Role,
 } from "@/lib/auth";
 
-export type FormState = { error?: string } | undefined;
+import type { FormState } from "@/lib/form-state";
 
 // ---------- login ----------
 
