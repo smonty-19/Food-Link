@@ -119,10 +119,13 @@ $$;
    4. allocate_donation_unsafe   !!! DEMO ONLY !!!
    The classic read-check-write bug: read the status WITHOUT a lock, wait,
    then insert. Every concurrent caller sees AVAILABLE and passes the check.
-   What still saves the data is the partial unique index from Review 2:
+   Two database layers still save the data. Trigger B.T1 re-reads the
+   status when the allocation row is inserted, which catches most callers.
+   Callers whose INSERTs truly overlap are stopped by the partial unique
+   index from Review 2:
        idx_allocations_one_active ON allocations (donation_id)
                                   WHERE status <> 'cancelled'
-   so all but one caller fail with 23505 (unique_violation). The demo
+   which fails them with 23505 (unique_violation). The demo
    contrasts this "last line of defense" with the clean queue in SAFE mode.
    ---------------------------------------------------------------------- */
 CREATE OR REPLACE FUNCTION allocate_donation_unsafe(p_donation_id    UUID,
@@ -138,7 +141,7 @@ DECLARE
 BEGIN
     SELECT status INTO v_status FROM donations WHERE donation_id = p_donation_id;   -- NO LOCK (the bug)
     IF v_status IS DISTINCT FROM 'AVAILABLE' THEN
-        RAISE EXCEPTION 'Donation % is not available (status: %)', p_donation_id, v_status;
+        RAISE EXCEPTION 'Unsafe pre-check: donation % is %', p_donation_id, v_status;
     END IF;
 
     PERFORM pg_sleep(p_delay_ms / 1000.0);                                         -- widen the race window
