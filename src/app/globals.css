@@ -1,29 +1,37 @@
 @import "tailwindcss";
 
-/* FoodLink palette: warm paper, deep ink, terracotta accent, leaf green. */
+/*
+ * FoodLink theme.
+ * Typography and spacing follow Apple's product pages (SF Pro scale: 17px body,
+ * tight headline tracking, pill buttons, 18px cards); colours are our own:
+ * a warm neutral grey canvas and a deep leaf-green accent.
+ */
 @theme {
-  --color-paper: #faf6ef;
+  --color-paper: #f4f4f1;
   --color-card: #ffffff;
-  --color-ink: #2b2521;
-  --color-muted: #6f655c;
-  --color-line: #e7ddd0;
-  --color-sand: #f2ebe0;
+  --color-ink: #1b1c1a;
+  --color-muted: #6b6b66;
+  --color-line: #e2e2dd;
+  --color-sand: #ecece7;
 
-  --color-brand: #b4532a;
-  --color-brand-dark: #8f3f1d;
-  --color-brand-soft: #f6e4d9;
+  --color-brand: #1d7a52;
+  --color-brand-dark: #155f3f;
+  --color-brand-soft: #e1f0e7;
 
-  --color-leaf: #4b7339;
-  --color-leaf-soft: #e5eedc;
-  --color-amber: #9a6512;
-  --color-amber-soft: #f8ebcf;
-  --color-rose: #a23b3e;
-  --color-rose-soft: #f6e0df;
-  --color-slate: #586474;
-  --color-slate-soft: #e6e9ee;
+  --color-leaf: #2f7a2e;
+  --color-leaf-soft: #e4f1df;
+  --color-amber: #94600f;
+  --color-amber-soft: #f7ecd2;
+  --color-rose: #b0333a;
+  --color-rose-soft: #f8e3e2;
+  --color-slate: #555d68;
+  --color-slate-soft: #e8eaed;
 
-  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-display), ui-serif, Georgia, serif;
+  /* SF Pro on Apple devices, Inter elsewhere. Both families share one stack. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-inter), "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  --font-serif: -apple-system, BlinkMacSystemFont, "SF Pro Display", var(--font-inter), "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
 }
 
 html {
@@ -34,30 +42,81 @@ body {
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  font-size: 17px;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
   background: var(--color-brand-soft);
 }
 
-/* Form controls share one quiet style */
+/* ---------- Apple-style type scale ---------- */
+@utility t-hero {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 6vw, 3.5rem); /* 40 -> 56px */
+  line-height: 1.07143;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+@utility t-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 2.5rem); /* 32 -> 40px */
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: 0;
+}
+@utility t-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.14286;
+  font-weight: 600;
+  letter-spacing: 0.007em;
+}
+@utility t-subhead {
+  font-size: 1.3125rem; /* 21px */
+  line-height: 1.381;
+  font-weight: 400;
+  letter-spacing: 0.011em;
+}
+@utility t-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.1875rem; /* 19px */
+  line-height: 1.21;
+  font-weight: 600;
+  letter-spacing: 0.012em;
+}
+@utility t-small {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.42859;
+  letter-spacing: -0.016em;
+}
+@utility t-caption {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.33337;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- form controls ---------- */
 .field {
   width: 100%;
-  border: 1px solid var(--color-line);
+  border: 1px solid #d4d4ce;
   background: var(--color-card);
-  border-radius: 0.5rem;
-  padding: 0.55rem 0.75rem;
-  font-size: 0.95rem;
-  line-height: 1.4;
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  font-size: 1.0625rem;
+  line-height: 1.3;
+  letter-spacing: -0.022em;
   outline: none;
-  transition: border-color 120ms, box-shadow 120ms;
+  transition: border-color 150ms, box-shadow 150ms;
 }
 .field:focus {
   border-color: var(--color-brand);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand) 15%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-brand) 18%, transparent);
 }
 
-/* Leaflet: keep maps under the sticky header and give pins our colours */
+/* ---------- Leaflet ---------- */
 .leaflet-container {
   font-family: var(--font-sans);
   z-index: 0;

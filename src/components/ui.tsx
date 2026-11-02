@@ -4,7 +4,7 @@ import type { ComponentProps, ReactNode } from "react";
 /* Small, plain building blocks shared by every page. */
 
 export function Page({ children, narrow = false }: { children: ReactNode; narrow?: boolean }) {
-  return <div className={`mx-auto px-4 py-10 sm:px-6 ${narrow ? "max-w-2xl" : "max-w-6xl"}`}>{children}</div>;
+  return <div className={`mx-auto px-5 pt-12 pb-20 ${narrow ? "max-w-[692px]" : "max-w-[1024px]"}`}>{children}</div>;
 }
 
 export function PageHeader({
@@ -19,16 +19,16 @@ export function PageHeader({
   back?: { href: string; label: string };
 }) {
   return (
-    <div className="mb-8">
+    <div className="mb-10">
       {back && (
-        <Link href={back.href} className="mb-3 inline-block text-sm text-muted hover:text-ink">
-          ← {back.label}
+        <Link href={back.href} className="t-small mb-4 inline-block text-brand hover:underline">
+          ‹ {back.label}
         </Link>
       )}
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl font-semibold tracking-tight">{title}</h1>
-          {subtitle && <p className="mt-1.5 text-muted">{subtitle}</p>}
+      <div className="flex flex-wrap items-end justify-between gap-5">
+        <div className="min-w-0">
+          <h1 className="t-headline">{title}</h1>
+          {subtitle && <div className="t-subhead mt-2 text-muted">{subtitle}</div>}
         </div>
         {action}
       </div>
@@ -37,13 +37,13 @@ export function PageHeader({
 }
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <section className={`rounded-xl border border-line bg-card ${className}`}>{children}</section>;
+  return <section className={`overflow-hidden rounded-[18px] bg-card ${className}`}>{children}</section>;
 }
 
 export function CardHeader({ title, aside }: { title: string; aside?: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-3.5">
-      <h2 className="font-serif text-lg font-semibold">{title}</h2>
+    <div className="flex items-center justify-between gap-3 px-5 pt-5 pb-3">
+      <h2 className="t-card-title">{title}</h2>
       {aside}
     </div>
   );
@@ -51,13 +51,15 @@ export function CardHeader({ title, aside }: { title: string; aside?: ReactNode 
 
 const BUTTON = {
   primary: "bg-brand text-white hover:bg-brand-dark",
-  secondary: "border border-line bg-card text-ink hover:border-ink",
-  danger: "border border-rose/30 bg-card text-rose hover:bg-rose-soft",
-  quiet: "text-muted hover:text-ink",
+  secondary: "bg-sand text-ink hover:bg-line",
+  danger: "bg-rose-soft text-rose hover:bg-rose hover:text-white",
+  quiet: "text-brand hover:underline",
 } as const;
 
+/** Pill buttons, 14px label, Apple proportions. */
 export function buttonClass(variant: keyof typeof BUTTON = "primary", extra = "") {
-  return `inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${BUTTON[variant]} ${extra}`;
+  const shape = variant === "quiet" ? "px-1 py-1" : "rounded-full px-[18px] py-[7px]";
+  return `t-small inline-flex items-center justify-center gap-1.5 font-normal transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${shape} ${BUTTON[variant]} ${extra}`;
 }
 
 export function ButtonLink({
@@ -70,7 +72,7 @@ export function ButtonLink({
 
 export function Label({ children, hint }: { children: ReactNode; hint?: string }) {
   return (
-    <span className="mb-1.5 block text-sm font-medium">
+    <span className="t-small mb-2 block font-semibold">
       {children}
       {hint && <span className="ml-1.5 font-normal text-muted">{hint}</span>}
     </span>
@@ -80,7 +82,7 @@ export function Label({ children, hint }: { children: ReactNode; hint?: string }
 export function ErrorNote({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <p role="alert" className="rounded-lg border border-rose/25 bg-rose-soft px-4 py-2.5 text-sm text-rose">
+    <p role="alert" className="t-small rounded-xl bg-rose-soft px-4 py-3 text-rose">
       {message}
     </p>
   );
@@ -88,28 +90,28 @@ export function ErrorNote({ message }: { message?: string }) {
 
 export function Notice({ children, tone = "neutral" }: { children: ReactNode; tone?: "neutral" | "good" | "warn" }) {
   const tones = {
-    neutral: "border-line bg-sand text-ink",
-    good: "border-leaf/25 bg-leaf-soft text-leaf",
-    warn: "border-amber/25 bg-amber-soft text-amber",
+    neutral: "bg-card text-ink",
+    good: "bg-leaf-soft text-leaf",
+    warn: "bg-amber-soft text-amber",
   };
-  return <p className={`rounded-lg border px-4 py-2.5 text-sm ${tones[tone]}`}>{children}</p>;
+  return <p className={`t-small rounded-xl px-4 py-3 ${tones[tone]}`}>{children}</p>;
 }
 
 export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
   return (
-    <div className="px-6 py-12 text-center">
-      <p className="font-serif text-lg">{title}</p>
-      {children && <div className="mx-auto mt-2 max-w-sm text-sm text-muted">{children}</div>}
+    <div className="px-6 py-14 text-center">
+      <p className="t-card-title">{title}</p>
+      {children && <div className="t-small mx-auto mt-2 max-w-sm text-muted">{children}</div>}
     </div>
   );
 }
 
 export function Stat({ label, value, note }: { label: string; value: ReactNode; note?: string }) {
   return (
-    <div className="rounded-xl border border-line bg-card px-5 py-4">
-      <div className="text-sm text-muted">{label}</div>
-      <div className="mt-1 font-serif text-3xl font-semibold tabular-nums">{value}</div>
-      {note && <div className="mt-0.5 text-xs text-muted">{note}</div>}
+    <div className="rounded-[18px] bg-card px-6 py-5">
+      <div className="t-small text-muted">{label}</div>
+      <div className="mt-1 font-serif text-[40px] leading-[1.1] font-semibold tabular-nums">{value}</div>
+      {note && <div className="t-caption mt-1 text-muted">{note}</div>}
     </div>
   );
 }
@@ -149,18 +151,18 @@ export function StatusBadge({ status }: { status: string }) {
   const tone = STATUS_TONE[status] ?? "slate";
   const label = status.replaceAll("_", " ").toLowerCase();
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${TONE[tone]}`}>
+    <span className={`t-caption inline-flex items-center rounded-full px-2.5 py-[3px] font-medium capitalize ${TONE[tone]}`}>
       {label}
     </span>
   );
 }
 
 export function TagList({ tags }: { tags: string[] | null | undefined }) {
-  if (!tags?.length) return <span className="text-xs text-muted">No dietary tags</span>;
+  if (!tags?.length) return <span className="t-caption text-muted">No dietary tags</span>;
   return (
     <span className="flex flex-wrap gap-1.5">
       {tags.map((t) => (
-        <span key={t} className="rounded border border-line px-1.5 py-0.5 text-xs text-muted">
+        <span key={t} className="t-caption rounded-full bg-sand px-2 py-0.5 text-muted">
           {t.replaceAll("_", " ")}
         </span>
       ))}

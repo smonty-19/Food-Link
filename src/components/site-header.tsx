@@ -18,46 +18,43 @@ const NAV: Record<Role, { href: string; label: string }[]> = {
   ],
 };
 
+/* Slim, frosted 44px bar with 12px links, in the style of Apple's global nav. */
 export async function SiteHeader() {
   const user = await getUser();
 
   return (
-    <header className="sticky top-0 z-20 border-b border-line bg-paper/95 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-4 sm:px-6">
-        <Link href="/" className="flex items-baseline gap-1.5">
-          <span className="font-serif text-xl font-semibold tracking-tight text-ink">FoodLink</span>
-          <span className="hidden text-xs text-muted sm:inline">Bengaluru</span>
+    <header className="sticky top-0 z-20 border-b border-black/5 bg-paper/80 backdrop-blur-xl backdrop-saturate-150">
+      <div className="t-caption mx-auto flex h-11 max-w-[1024px] items-center gap-8 px-5">
+        <Link href="/" className="text-[15px] font-semibold tracking-[-0.01em] text-ink">
+          FoodLink
         </Link>
 
         {user && (
-          <nav className="hidden gap-6 text-sm md:flex">
+          <nav className="hidden gap-7 md:flex">
             {NAV[user.role].map((item) => (
-              <Link key={item.href} href={item.href} className="text-muted transition hover:text-ink">
+              <Link key={item.href} href={item.href} className="text-ink/80 transition-colors hover:text-ink">
                 {item.label}
               </Link>
             ))}
           </nav>
         )}
 
-        <div className="ml-auto flex items-center gap-4 text-sm">
+        <div className="ml-auto flex items-center gap-5">
           {user ? (
             <>
-              <div className="hidden text-right leading-tight sm:block">
-                <div className="font-medium">{user.name}</div>
-                <div className="text-xs text-muted">{user.orgName}</div>
-              </div>
+              <span className="hidden text-ink/80 sm:inline">
+                {user.name} <span className="text-muted">· {user.orgName}</span>
+              </span>
               <form action={logout}>
-                <button className="rounded-md border border-line px-3 py-1.5 text-muted transition hover:border-ink hover:text-ink">
-                  Log out
-                </button>
+                <button className="text-ink/80 transition-colors hover:text-ink">Log out</button>
               </form>
             </>
           ) : (
             <>
-              <Link href="/login" className="text-muted hover:text-ink">
+              <Link href="/login" className="text-ink/80 hover:text-ink">
                 Log in
               </Link>
-              <Link href="/register" className="rounded-md bg-brand px-3 py-1.5 font-medium text-white hover:bg-brand-dark">
+              <Link href="/register" className="rounded-full bg-brand px-3 py-1 font-medium text-white hover:bg-brand-dark">
                 Join
               </Link>
             </>
@@ -66,9 +63,9 @@ export async function SiteHeader() {
       </div>
 
       {user && (
-        <nav className="flex gap-5 overflow-x-auto border-t border-line px-4 py-2 text-sm md:hidden">
+        <nav className="t-caption flex gap-6 overflow-x-auto border-t border-black/5 px-5 py-2 md:hidden">
           {NAV[user.role].map((item) => (
-            <Link key={item.href} href={item.href} className="shrink-0 text-muted hover:text-ink">
+            <Link key={item.href} href={item.href} className="shrink-0 text-ink/80 hover:text-ink">
               {item.label}
             </Link>
           ))}
