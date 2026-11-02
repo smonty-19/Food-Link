@@ -13,14 +13,14 @@ export default async function RegisterPage() {
 
   return (
     <Page narrow>
-      <h1 className="font-serif text-3xl font-semibold">Register your organization</h1>
-      <p className="mt-1.5 text-muted">
+      <h1 className="t-headline">Register your organization.</h1>
+      <p className="t-subhead mt-2 text-muted">
         One account per person. Already registered?{" "}
         <Link href="/login" className="text-brand underline-offset-2 hover:underline">
           Log in
         </Link>
       </p>
-      <Card className="mt-8 p-6">
+      <Card className="mt-8 p-7">
         <RegisterForm />
       </Card>
     </Page>

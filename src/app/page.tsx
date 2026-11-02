@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ButtonLink } from "@/components/ui";
 import { getUser, homeFor } from "@/lib/auth";
@@ -16,60 +17,60 @@ export default async function Home() {
   );
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      <section className="grid gap-12 py-16 md:grid-cols-[1.3fr_1fr] md:py-24">
-        <div>
-          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-brand">Surplus food, shared fast</p>
-          <h1 className="font-serif text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-            Good food shouldn&apos;t outlive the evening it was cooked for.
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-muted">
-            Restaurants, caterers and canteens list what&apos;s left over. Shelters, orphanages and community kitchens
-            nearby claim it before it expires. Each listing goes to exactly one organization, even when two of them click
-            at the same moment.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/register">Register your organization</ButtonLink>
-            <ButtonLink href="/login" variant="secondary">
-              Log in
-            </ButtonLink>
-          </div>
-        </div>
-
-        <div className="self-end rounded-xl border border-line bg-card p-6">
-          <p className="text-sm text-muted">On FoodLink right now</p>
-          <dl className="mt-4 space-y-4">
-            <div className="flex items-baseline justify-between border-b border-line pb-3">
-              <dt>Listings open for pickup</dt>
-              <dd className="font-serif text-2xl font-semibold">{num(stats.live)}</dd>
-            </div>
-            <div className="flex items-baseline justify-between border-b border-line pb-3">
-              <dt>Servings delivered</dt>
-              <dd className="font-serif text-2xl font-semibold">{num(stats.servings)}</dd>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <dt>Kitchens that have listed food</dt>
-              <dd className="font-serif text-2xl font-semibold">{num(stats.donors)}</dd>
-            </div>
-          </dl>
+    <div>
+      {/* ---- hero ---- */}
+      <section className="mx-auto max-w-[980px] px-5 pt-20 pb-16 text-center sm:pt-28">
+        <p className="t-subhead font-semibold text-brand">FoodLink</p>
+        <h1 className="t-hero mx-auto mt-3 max-w-[820px]">Good food shouldn&apos;t outlive the evening it was cooked for.</h1>
+        <p className="t-subhead mx-auto mt-5 max-w-[640px] text-muted">
+          Kitchens list what&apos;s left over. Shelters and community kitchens nearby claim it before it expires. Each
+          listing goes to exactly one organization, even when two of them claim it at the same moment.
+        </p>
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          <ButtonLink href="/register" className="px-[22px] py-[11px] text-[17px]">
+            Register your organization
+          </ButtonLink>
+          <Link href="/login" className="text-[17px] text-brand hover:underline">
+            Log in ›
+          </Link>
         </div>
       </section>
 
-      <section className="grid gap-8 border-t border-line py-14 md:grid-cols-3">
-        {[
-          ["List it", "A donor describes the food, how many it serves, its dietary tags and when it must be eaten by."],
-          [
-            "Match it",
-            "Each recipient's standing requirement is matched by meaning, then checked against diet, capacity and distance.",
-          ],
-          ["Hand it over", "The recipient schedules a pickup, the donor hands it over, and the recipient confirms it arrived."],
-        ].map(([title, text], i) => (
-          <div key={title}>
-            <div className="font-serif text-sm text-brand">0{i + 1}</div>
-            <h2 className="mt-1 font-serif text-xl font-semibold">{title}</h2>
-            <p className="mt-2 text-muted">{text}</p>
-          </div>
-        ))}
+      {/* ---- live numbers ---- */}
+      <section className="mx-auto max-w-[1024px] px-5">
+        <div className="grid gap-px overflow-hidden rounded-[18px] bg-line sm:grid-cols-3">
+          {[
+            [num(stats.live), "listings open for pickup now"],
+            [num(stats.servings), "servings delivered"],
+            [num(stats.donors), "kitchens that have listed food"],
+          ].map(([value, label]) => (
+            <div key={label} className="bg-card px-8 py-10 text-center">
+              <div className="t-hero tabular-nums">{value}</div>
+              <div className="t-small mt-2 text-muted">{label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ---- how it works ---- */}
+      <section className="mx-auto max-w-[1024px] px-5 pt-24 pb-24">
+        <h2 className="t-headline text-center">How it works.</h2>
+        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          {[
+            ["List it.", "A donor describes the food, how many it serves, its dietary tags and when it must be eaten by."],
+            [
+              "Match it.",
+              "Each recipient's requirement is matched by meaning, then checked against diet, capacity and distance.",
+            ],
+            ["Hand it over.", "The recipient schedules a pickup, the donor hands it over, and the recipient confirms it arrived."],
+          ].map(([title, text], i) => (
+            <div key={title} className="rounded-[18px] bg-card px-7 pt-7 pb-9">
+              <div className="t-small font-semibold text-brand">Step {i + 1}</div>
+              <h3 className="t-title mt-2">{title}</h3>
+              <p className="mt-3 text-muted">{text}</p>
+            </div>
+          ))}
+        </div>
       </section>
     </div>
   );

@@ -14,7 +14,7 @@ export function RegisterForm() {
   return (
     <form action={action} className="space-y-8">
       <fieldset className="space-y-5">
-        <legend className="mb-1 font-serif text-lg font-semibold">What does your organization do?</legend>
+        <legend className="t-card-title mb-1">What does your organization do?</legend>
         <div className="grid gap-3 sm:grid-cols-2">
           {[
             ["donor", "We have surplus food", "Restaurant, hotel, caterer, canteen, store"],
@@ -22,12 +22,12 @@ export function RegisterForm() {
           ].map(([value, title, hint], i) => (
             <label
               key={value}
-              className="flex cursor-pointer gap-3 rounded-lg border border-line p-4 has-checked:border-brand has-checked:bg-brand-soft/50"
+              className="flex cursor-pointer gap-3 rounded-[14px] border border-line p-4 transition-colors has-checked:border-brand has-checked:bg-brand-soft/50"
             >
               <input type="radio" name="role" value={value} defaultChecked={i === 0} className="mt-1 accent-brand" />
               <span>
                 <span className="block font-medium">{title}</span>
-                <span className="text-sm text-muted">{hint}</span>
+                <span className="t-small text-muted">{hint}</span>
               </span>
             </label>
           ))}
@@ -35,7 +35,7 @@ export function RegisterForm() {
       </fieldset>
 
       <fieldset className="space-y-5">
-        <legend className="mb-1 font-serif text-lg font-semibold">Organization</legend>
+        <legend className="t-card-title mb-1">Organization</legend>
         <label className="block">
           <Label>Name</Label>
           <input name="orgName" required className="field" placeholder="e.g. Akshaya Shelter Home" />
@@ -51,7 +51,7 @@ export function RegisterForm() {
       </fieldset>
 
       <fieldset className="space-y-5">
-        <legend className="mb-1 font-serif text-lg font-semibold">Your account</legend>
+        <legend className="t-card-title mb-1">Your account</legend>
         <label className="block">
           <Label>Your name</Label>
           <input name="name" required autoComplete="name" className="field" />

@@ -20,19 +20,19 @@ export default async function LoginPage() {
   return (
     <Page narrow>
       <div className="mx-auto max-w-md">
-        <h1 className="font-serif text-3xl font-semibold">Welcome back</h1>
-        <p className="mt-1.5 text-muted">
+        <h1 className="t-headline">Welcome back.</h1>
+        <p className="t-subhead mt-2 text-muted">
           New here?{" "}
           <Link href="/register" className="text-brand underline-offset-2 hover:underline">
             Register your organization
           </Link>
         </p>
 
-        <Card className="mt-8 p-6">
+        <Card className="mt-8 p-7">
           <LoginForm />
         </Card>
 
-        <div className="mt-6 rounded-xl border border-dashed border-line p-4 text-sm">
+        <div className="t-small mt-6 rounded-[18px] bg-card/60 p-5">
           <p className="mb-2 font-medium">Demo accounts (seed data)</p>
           <table className="w-full text-muted">
             <tbody>
