@@ -13,7 +13,8 @@
                                         longer (two-browser and race demos)
      4  allocate_donation_unsafe()    : DEMO ONLY, no row lock
      5  demo helpers                  : fresh race donation + claimant list
-     6  privileges
+     6  donation_timeline()           : audit trail, visible only to the parties
+     7  privileges
    ====================================================================== */
 
 \set ON_ERROR_STOP on
@@ -203,7 +204,38 @@ $$;
 
 
 /* ----------------------------------------------------------------------
-   6. PRIVILEGES (same least-privilege model as review2.sql Section 10)
+   6. donation_timeline
+   status_history is INSERT-only for the app role (review2.sql, Section 10),
+   so the app cannot read it directly. This SECURITY DEFINER function runs
+   with its owner's rights but only returns a donation's history to the
+   organization that listed it or one that was allocated it. The access rule
+   is enforced in the database, not in application code.
+   search_path is pinned, as required for any SECURITY DEFINER function.
+   ---------------------------------------------------------------------- */
+CREATE OR REPLACE FUNCTION donation_timeline(p_donation_id UUID)
+RETURNS TABLE (entity_type     VARCHAR,
+               old_status      VARCHAR,
+               new_status      VARCHAR,
+               changed_at      TIMESTAMPTZ,
+               db_user         NAME,
+               changed_by_name VARCHAR)
+LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+    SELECT h.entity_type, h.old_status, h.new_status, h.changed_at, h.db_user, u.name
+      FROM status_history h
+      LEFT JOIN users u ON u.user_id = h.changed_by
+     WHERE h.donation_id = p_donation_id
+       AND (EXISTS (SELECT 1 FROM donations d
+                     WHERE d.donation_id = p_donation_id AND d.org_id = current_org_id())
+            OR EXISTS (SELECT 1 FROM allocations a
+                        WHERE a.donation_id = p_donation_id AND a.recipient_org_id = current_org_id()))
+     ORDER BY h.changed_at, h.history_id;
+$$;
+
+
+/* ----------------------------------------------------------------------
+   7. PRIVILEGES (same least-privilege model as review2.sql Section 10)
    ---------------------------------------------------------------------- */
 REVOKE ALL ON sessions FROM PUBLIC;
 GRANT SELECT, INSERT, DELETE ON sessions TO foodlink_app;
@@ -214,13 +246,15 @@ REVOKE ALL ON FUNCTION
       allocate_donation_slow(UUID, UUID, UUID, INTEGER),
       allocate_donation_unsafe(UUID, UUID, UUID, INTEGER),
       demo_create_race_donation(NUMERIC),
-      demo_race_claimants(UUID)
+      demo_race_claimants(UUID),
+      donation_timeline(UUID)
    FROM PUBLIC;
 
 GRANT EXECUTE ON FUNCTION
       browse_available_donations(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, UUID[], UUID),
       allocate_donation_slow(UUID, UUID, UUID, INTEGER),
-      allocate_donation_unsafe(UUID, UUID, UUID, INTEGER)
+      allocate_donation_unsafe(UUID, UUID, UUID, INTEGER),
+      donation_timeline(UUID)
    TO foodlink_app;
 
 GRANT EXECUTE ON ALL ROUTINES IN SCHEMA public TO foodlink_admin;
