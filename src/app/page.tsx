@@ -22,9 +22,8 @@ export default async function Home() {
       <section className="mx-auto max-w-[980px] px-5 pt-20 pb-16 text-center sm:pt-28">
         <p className="t-subhead font-semibold text-brand">FoodLink</p>
         <h1 className="t-hero mx-auto mt-3 max-w-[820px]">Good food shouldn&apos;t outlive the evening it was cooked for.</h1>
-        <p className="t-subhead mx-auto mt-5 max-w-[640px] text-muted">
-          Kitchens list what&apos;s left over. Shelters and community kitchens nearby claim it before it expires. Each
-          listing goes to exactly one organization, even when two of them claim it at the same moment.
+        <p className="t-subhead mx-auto mt-5 text-muted">
+          Surplus food from local kitchens, shared with the shelters that need it.
         </p>
         <div className="mt-9 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
           <ButtonLink href="/register" className="px-[22px] py-[11px] text-[17px]">
