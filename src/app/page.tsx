@@ -1,69 +1,76 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
+import { ButtonLink } from "@/components/ui";
+import { getUser, homeFor } from "@/lib/auth";
+import { query } from "@/lib/db";
+import { num } from "@/lib/format";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getUser();
+  if (user) redirect(homeFor(user.role));
+
+  const [stats] = await query<{ live: string; servings: string; donors: string }>(
+    `SELECT count(*) FILTER (WHERE status = 'AVAILABLE' AND expires_at > now())   AS live,
+            coalesce(sum(quantity) FILTER (WHERE status = 'COMPLETED'), 0)          AS servings,
+            count(DISTINCT org_id)                                                  AS donors
+       FROM donations`,
+  );
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <section className="grid gap-12 py-16 md:grid-cols-[1.3fr_1fr] md:py-24">
+        <div>
+          <p className="mb-4 text-sm font-medium uppercase tracking-wider text-brand">Surplus food, shared fast</p>
+          <h1 className="font-serif text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
+            Good food shouldn&apos;t outlive the evening it was cooked for.
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-5 max-w-xl text-lg text-muted">
+            Restaurants, caterers and canteens list what&apos;s left over. Shelters, orphanages and community kitchens
+            nearby claim it before it expires. Each listing goes to exactly one organization, even when two of them click
+            at the same moment.
           </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <ButtonLink href="/register">Register your organization</ButtonLink>
+            <ButtonLink href="/login" variant="secondary">
+              Log in
+            </ButtonLink>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="self-end rounded-xl border border-line bg-card p-6">
+          <p className="text-sm text-muted">On FoodLink right now</p>
+          <dl className="mt-4 space-y-4">
+            <div className="flex items-baseline justify-between border-b border-line pb-3">
+              <dt>Listings open for pickup</dt>
+              <dd className="font-serif text-2xl font-semibold">{num(stats.live)}</dd>
+            </div>
+            <div className="flex items-baseline justify-between border-b border-line pb-3">
+              <dt>Servings delivered</dt>
+              <dd className="font-serif text-2xl font-semibold">{num(stats.servings)}</dd>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <dt>Kitchens that have listed food</dt>
+              <dd className="font-serif text-2xl font-semibold">{num(stats.donors)}</dd>
+            </div>
+          </dl>
         </div>
-      </main>
+      </section>
+
+      <section className="grid gap-8 border-t border-line py-14 md:grid-cols-3">
+        {[
+          ["List it", "A donor describes the food, how many it serves, its dietary tags and when it must be eaten by."],
+          [
+            "Match it",
+            "Each recipient's standing requirement is matched by meaning, then checked against diet, capacity and distance.",
+          ],
+          ["Hand it over", "The recipient schedules a pickup, the donor hands it over, and the recipient confirms it arrived."],
+        ].map(([title, text], i) => (
+          <div key={title}>
+            <div className="font-serif text-sm text-brand">0{i + 1}</div>
+            <h2 className="mt-1 font-serif text-xl font-semibold">{title}</h2>
+            <p className="mt-2 text-muted">{text}</p>
+          </div>
+        ))}
+      </section>
     </div>
   );
 }
